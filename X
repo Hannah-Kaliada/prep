@@ -1,0 +1,79 @@
+//
+//  main.c
+//  prep
+//
+//  Created by Hanna Kaliada on 17.01.23.
+//
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+int task11(int n, int m, int **a) //поиск номера столбца со всеми отрицательными эл-тами
+{
+    int x=-1;
+    for (int j=0; j<m; j++)
+    {   int fl=0;
+        for (int i=0; i<n; i++)
+        {
+            if (a[i][j]<0)
+                fl+=1;
+        }
+        if (fl==n)
+            x=j;
+    }
+    return x;
+}
+// 3456
+void task12(int G, int n, int m, int **a)
+{
+    for (int i=0; i<n; i++)
+        for (int j=G; j<m-1; j++)
+        {
+            a[i][j]=a[i][j+1];
+        }
+    for (int i = 0; i<n; i++)
+    {
+        a[i] = (int*)realloc(a[i],(m-1)*sizeof(int));
+    }
+}
+int task1(int n, int m, int **a)
+{
+    int G = task11(n, m, a);
+    if (G==-1)
+    {
+        printf("Нет отрицательных столбцов.\n");
+        return 0;
+    }
+    else printf("%d - номер последнего столбеца со всеми отрицательными числами.\n", G);
+    task12(G, n, m, a);
+    for (int i=0; i<n; i++)
+    {
+        for (int j=0; j<m-1; j++)
+        printf("%d\t",  a[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
+int main(int argc, const char * argv[])
+{
+    srand((int)time(NULL));
+    const int N=4, M=5;
+    //N- строки M- столбцы
+    int **a;
+    a = (int**)malloc(N * sizeof(int*));
+    for (int i = 0; i<N; i++)
+    {
+        a[i] = (int*)malloc(M * sizeof(int));
+    }
+    for (int i=0; i<N; i++)
+        for (int j=0; j<M; j++)
+            a[i][j] = (rand() % 10) - (rand() % 15);
+    for (int i=0; i<N; i++)
+    {
+        for (int j=0; j<M; j++)
+        printf("%d\t",  a[i][j]);
+        printf("\n");
+    }
+    task1(N, M, a);
+    return 0;
+}
