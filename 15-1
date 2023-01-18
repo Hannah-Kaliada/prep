@@ -1,0 +1,71 @@
+//
+//  main.c
+//  prep
+//
+//  Created by Hanna Kaliada on 17.01.23.
+//
+//Удалить каждый к-ый столбец из матрицы .
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+int task12(int G, int n, int* m, int **a)
+{
+    int z=(*m);
+    for (int i=0; i<n; i++)
+        for (int j=G; j<(*m)-1; j++)
+        {
+            a[i][j]=a[i][j+1];
+        }
+    z--;
+    return z;
+}
+int task1(int n, int* m, int **a, int k)
+{ int z =(*m);
+    int j=0;
+    for (int i=0; i<(*m); i++)
+    {
+        if (i%k==k-1)
+        {
+            z=task12(i-j, n, &z, a);
+            j++;
+        }
+    }
+    (*m)=z;
+    for (int i = 0; i<n; i++)
+    {
+        a[i] = (int*)realloc(a[i],z*sizeof(int));
+    }
+    return *m;
+}
+int main()
+{
+    srand((int)time(NULL));
+    int N=4;
+    int M=7;
+    int k = 4;
+    //N- строки M- столбцы
+    int **a;
+    a = (int**)malloc(N * sizeof(int*));
+    for (int i = 0; i<N; i++)
+    {
+        a[i] = (int*)malloc(M * sizeof(int));
+    }
+    for (int i=0; i<N; i++)
+        for (int j=0; j<M; j++)
+            a[i][j] = (rand() % 10);
+    for (int i=0; i<N; i++)
+    {
+        for (int j=0; j<M; j++)
+        printf("%d\t",  a[i][j]);
+        printf("\n");
+    }
+    task1(N, &M, a, k);
+    puts ("New mas:\n");
+    for (int i=0; i<N; i++)
+    {
+        for (int j=0; j<M; j++)
+        printf("%d\t",  a[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
