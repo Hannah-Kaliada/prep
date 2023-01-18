@@ -1,0 +1,72 @@
+//
+//  main.c
+//  prep
+//
+//  Created by Hanna Kaliada on 17.01.23.
+//
+// удаление k слова
+#include <stdio.h>
+#include <stdlib.h>
+char* New(void){
+    unsigned int str_len = 1024;
+    char* str_ptr = (char*)malloc(1024);
+    int c;
+    unsigned int i;
+    for (i = 0, c = EOF; (c = getchar()) != '\n' && c != EOF; i++) {
+        str_ptr[i] = c;
+
+
+        if (i == str_len) {
+            str_len = i + 1024;
+            str_ptr = (char*)realloc(str_ptr, str_len);
+        }
+    }
+    str_ptr[i] = '\0';
+
+    return str_ptr;
+}
+int str_length(const char* str)
+{
+    return (*str) ? str_length(++str) + 1 : 0;
+}
+int task2(char* X, int k)
+{
+    int counter=0;
+    int l=str_length(X);
+    int n=0; //начало к слова
+    int m=0; // начало к+1 слова
+    for (int i=0; i<=l; i++) //поиск индексов
+    {
+        if (X[i]==' '||i==l)
+            counter++;
+        if (X[i]==' '&&counter==k-1)
+            n=i;
+        if ((X[i]==' '||i==l)&&counter==k)
+            m=i;
+    }
+    n++;
+    m++;
+if (k==1)
+    n=0;
+    int index=n;
+            for (int i = n; X[i] != '\0'; i++)
+            {
+                            X[i] = X[i+(m-n)];
+                index++;
+            }
+            X[index]='\0';
+        return 0;
+    return 0;
+}
+int main(int argc, const char * argv[])
+{
+    rewind(stdin);
+    printf("Введите строку:\n");
+    char* s  = New();
+    rewind(stdin);
+    printf("Введите k:\n");
+    int k=0;
+    scanf("%d", &k);
+    task2(s, k);
+    printf("%s", s);
+}
