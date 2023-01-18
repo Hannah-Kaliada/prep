@@ -1,0 +1,63 @@
+//
+//  main.c
+//  prep
+//
+//  Created by Hanna Kaliada on 18.01.23.
+//
+// Перевернуть к-ое слово в строке
+#include <stdio.h>
+#include <stdlib.h>
+char* New(void){
+    unsigned int str_len = 1024;
+    char* str_ptr = (char*)malloc(1024);
+    int c;
+    unsigned int i;
+    for (i = 0, c = EOF; (c = getchar()) != '\n' && c != EOF; i++) {
+        str_ptr[i] = c;
+
+
+        if (i == str_len) {
+            str_len = i + 1024;
+            str_ptr = (char*)realloc(str_ptr, str_len);
+        }
+    }
+    str_ptr[i] = '\0';
+
+    return str_ptr;
+}
+int str_length(const char* str)
+{
+    return (*str) ? str_length(++str) + 1 : 0;
+}
+void task2(char* X, int k)
+{
+    int n=0; //индекс начала k слова
+    for (int i = 0; X[i]!='\0'; i++)
+    {
+        if((X[i]==' ')&& (n<=k-1))
+        n++;
+        if((X[i]==' ')&& (n==k-1))
+            n=i+1;
+    }
+    int m=n; // index of the last element in k word
+    for (int i=n; (X[i]!=' ')&&(i!=str_length(X)); i++)
+        m++;
+    m--;
+    for (int i=0; i<=(m-n)/2; i++)
+    {
+        char temp = X[n+i];
+        X[n+i]=X[m-i];
+        X[m-i]=temp;
+    }
+}
+int main(void)
+{
+    rewind(stdin);
+    printf("Введите строку:\n");
+    char* s  = New();
+    printf("Введите k:\n");
+    int k=0;
+    scanf("%d", &k);
+    task2(s, k);
+    printf("Новая строка:\n%s\n", s);
+}
