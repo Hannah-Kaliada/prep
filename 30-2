@@ -1,0 +1,95 @@
+//
+//  main.c
+//  prep
+//
+//  Created by Hanna Kaliada on 18.01.23.
+//
+// Поменять 1 и 4 слова
+#include <stdio.h>
+#include <stdlib.h>
+char* New(void){
+    unsigned int str_len = 1024;
+    char* str_ptr = (char*)malloc(1024);
+    int c;
+    unsigned int i;
+    for (i = 0, c = EOF; (c = getchar()) != '\n' && c != EOF; i++) {
+        str_ptr[i] = c;
+
+
+        if (i == str_len) {
+            str_len = i + 1024;
+            str_ptr = (char*)realloc(str_ptr, str_len);
+        }
+    }
+    str_ptr[i] = '\0';
+
+    return str_ptr;
+}
+int str_length(const char* str)
+{
+    return (*str) ? str_length(++str) + 1 : 0;
+}
+void reverse(char* array, int a, int b)
+{
+    if (a == b - 1 || a == b){}
+    else
+        reverse(array, a + 1, b - 1);
+    char tmp = array[a];
+    array[a] = array[b];
+    array[b] = tmp;
+}
+void task22(char* X, int k, int* a, int* b)
+{
+        int counter=0;
+        int l=str_length(X);
+        int n=0; //начало к слова
+        int m=0; // начало к+1 слова
+        for (int i=0; i<=l; i++) //поиск индексов
+        {
+            if (X[i]==' '||i==l)
+                counter++;
+            if (X[i]==' '&&counter==k-1)
+                n=i;
+            if ((X[i]==' '||i==l)&&counter==k)
+                m=i;
+        }
+        n++;
+        m--;
+    if (k==1)
+        n=0;
+    *a=n;
+    *b=m;
+}
+void task2(char* X)
+{
+    int n=0;
+    int m=0;
+    task22(X, 4, &n, &m);
+    reverse(X, 0, m);
+    for (int i=1; i<=4; i++)
+    {
+        task22(X, i, &n, &m);
+        reverse(X, n, m);
+    }
+    int nn=0;
+    task22(X, 2, &n, &m);
+    nn=n;
+    int mm=0;
+    task22(X, 3, &n, &m);
+    mm=m;
+    reverse(X, nn, mm);
+    for (int i=2; i<4; i++)
+    {
+        task22(X, i, &n, &m);
+        reverse(X, n, m);
+    }
+}
+//first second third fourth fifth
+int main(void)
+{
+    rewind(stdin);
+    printf("Введите строку:\n");
+    char* s  = New();
+    task2(s);
+    printf("\nНовая строка:\n%s\n", s);
+}
