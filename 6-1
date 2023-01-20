@@ -1,0 +1,99 @@
+//
+//  main.c
+//  prep
+//
+//  Created by Hanna Kaliada on 17.01.23.
+//
+//Отсортировать четные элементы матрицы
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+void InsertionSort(int n, int mass[])
+{
+    int newElement, location;
+
+    for (int i = 1; i < n; i++)
+    {
+        newElement = mass[i];
+        location = i - 1;
+        while(location >= 0 && mass[location] > newElement)
+        {
+            mass[location+1] = mass[location];
+            location = location - 1;
+        }
+        mass[location+1] = newElement;
+    }
+}
+void task1(int n, int m, int **a)
+{
+    int counter=0;
+    for(int i=0; i<n;i++)
+        for(int j=0; j<m;j++)
+        {
+            if(a[i][j]%2==0)
+                counter++;
+        }
+    if(counter!=0)
+    {
+        a = (int**)realloc(a, (n+1) * sizeof(int *));
+        a[n]=(int*)realloc(a[n], counter*sizeof(int));
+    }
+    int z=0;
+        for(int i=0; i<n;i++)
+            for(int j=0; j<m;j++)
+            {
+                if (z==counter)
+                    break;
+                if(a[i][j]%2==0)
+                {
+                    a[n][z]=a[i][j];
+                    z++;
+                }
+            }
+    InsertionSort(counter, a[n]);
+    z=0;
+    for(int i=0; i<n;i++)
+        for(int j=0; j<m;j++)
+        {
+            if (z==counter)
+                break;
+            if(a[i][j]%2==0)
+            {
+                a[i][j]=a[n][z];
+                z++;
+            }
+        }
+        a = (int**)realloc(a, (n) * sizeof(int *));
+    free(a[n]);
+}
+int main()
+{
+    srand((int)time(NULL));
+    int N=7;
+    int M=7;
+    //N- строки M- столбцы
+    int **a;
+    a = (int**)malloc(N * sizeof(int*));
+    for (int i = 0; i<N; i++)
+    {
+        a[i] = (int*)malloc(M * sizeof(int));
+    }
+    for (int i=0; i<N; i++)
+        for (int j=0; j<M; j++)
+            a[i][j] = (rand() % 10)-rand()%12;
+    for (int i=0; i<N; i++)
+    {
+        for (int j=0; j<M; j++)
+        printf("%d\t",  a[i][j]);
+        printf("\n");
+    }
+    task1(N, M, a);
+    puts("New mas:\n");
+    for (int i=0; i<N; i++)
+    {
+        for (int j=0; j<M; j++)
+        printf("%d\t",  a[i][j]);
+        printf("\n");
+    }
+    return 0;
+}
