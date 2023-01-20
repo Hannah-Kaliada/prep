@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+//в m строке удалить к слово
+char* New(void){
+    unsigned int str_len = 1024;
+    char* str_ptr = (char*)malloc(1024);
+    int c;
+    unsigned int i;
+    for (i = 0, c = EOF; (c = getchar()) != '\n' && c != EOF; i++) {
+        str_ptr[i] = c;
+
+
+        if (i == str_len) {
+            str_len = i + 1024;
+            str_ptr = (char*)realloc(str_ptr, str_len);
+        }
+    }
+    str_ptr[i] = '\0';
+
+    return str_ptr;
+}
+int str_length(const char* str)
+ {
+     return (*str) ? str_length(++str) + 1 : 0;
+ }
+void kword(char* X, int k, int* a, int* b)
+ {
+         int counter=0;
+         int l=str_length(X);
+         int n=0; //начало к слова
+         int m=0; // начало к+1 слова
+         for (int i=0; i<=l; i++) //поиск индексов
+         {
+             if (X[i]==' '||i==l)
+                 counter++;
+             if (X[i]==' '&&counter==k-1)
+                 n=i;
+             if ((X[i]==' '||i==l)&&counter==k)
+                 m=i;
+         }
+         n++;
+         m--;
+     if (k==1)
+         n=0;
+     *a=n;
+     *b=m;
+ }
+// erfhj wje rt
+void del(char* X, int a, int b)
+{
+    for (int i=a; i<str_length(X); i++)
+        X[i]=X[i+b-a+2];
+}
+void task2(char** X, int m, int k)
+{
+    int a=0;
+    int b=0;
+    kword(X[m], k, &a, &b);
+    del(X[m], a, b);
+}
+int main(void)
+{
+        printf("Введите количество строк в массиве:\n");
+        int n = 0;
+        scanf("%d", &n);
+        char** arr = (char**)malloc(n * sizeof(char*));
+        for (int i = 0; i < n; i++)
+        {
+            rewind(stdin);
+            printf("Введите %d строку:\n", i);
+            arr[i] = New();
+        }
+    printf("Введите m:\n");
+    int m = 0;
+    scanf("%d", &m);
+    m--;
+    printf("Введите k:\n");
+    int k = 0;
+    scanf("%d", &k);
+    task2(arr, m, k);
+        for (int i = 0; i < n; i++)
+        {
+            
+            printf("\n%s", arr[i]);
+        }
+}
